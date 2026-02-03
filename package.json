@@ -12,6 +12,7 @@
   "keywords": ["game", "phaser", "survival", "salamander", "pixel-art"],
   "author": "",
   "license": "MIT",
+  "packageManager": "pnpm@9.15.4",
   "dependencies": {
     "phaser": "^3.80.1"
   },
