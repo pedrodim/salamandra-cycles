@@ -155,10 +155,10 @@ const config: Phaser.Types.Core.GameConfig = {
   width: VIEWPORT.maxWidth,
   height: VIEWPORT.maxHeight,
   
-  // Pixel art mode!
-  pixelArt: true,
-  antialias: false,
-  roundPixels: true,
+  // Rendering
+  pixelArt: false,
+  antialias: true,
+  roundPixels: false,
   
   // Colore sfondo
   backgroundColor: COLORS.water.deep,

@@ -13,9 +13,8 @@ export class EggScene extends Phaser.Scene {
   
   // Elementi grafici
   private playerEgg!: Phaser.GameObjects.Container;
-  private siblingEggs: Phaser.GameObjects.Ellipse[] = [];
-  private embryoSprite!: Phaser.GameObjects.Ellipse;
-  private shellSprite!: Phaser.GameObjects.Ellipse;
+  private siblingEggs: Phaser.GameObjects.Image[] = [];
+  private eggSprite!: Phaser.GameObjects.Image;
   
   // Predatori
   private predatorShadow: Phaser.GameObjects.Ellipse | null = null;
@@ -46,7 +45,13 @@ export class EggScene extends Phaser.Scene {
   init(data: { gameState: GameState }) {
     this.gameState = data.gameState;
   }
-  
+
+  preload() {
+    this.load.image('egg_1', 'assets/sprites/egg_1.png');
+    this.load.image('egg_2', 'assets/sprites/egg_2.png');
+    this.load.image('egg_3', 'assets/sprites/egg_3.png');
+  }
+
   create() {
     // Setup camera con viewport piccolo
     this.setupCamera();
@@ -117,52 +122,44 @@ export class EggScene extends Phaser.Scene {
   private createSiblingEggs() {
     this.gameState.siblings.forEach((sibling, index) => {
       if (!sibling.isAlive) return;
-      
-      const egg = this.add.ellipse(
-        sibling.x,
-        sibling.y,
-        12,
-        16,
-        COLORS.egg.shell,
-        0.7
-      );
-      
+
+      const egg = this.add.image(sibling.x, sibling.y, 'egg_1');
+      egg.setScale(0.03);
+      egg.setAlpha(0.7);
+
       // Leggera pulsazione per dare vita
       this.tweens.add({
         targets: egg,
-        scaleX: 1.05,
-        scaleY: 0.95,
+        scaleX: 0.032,
+        scaleY: 0.028,
         duration: 2000 + index * 200,
         yoyo: true,
         repeat: -1,
         ease: 'Sine.easeInOut',
       });
-      
+
       this.siblingEggs.push(egg);
     });
   }
   
   private createPlayerEgg() {
     const { x, y } = this.gameState.player;
-    
+
     // Container per l'uovo
     this.playerEgg = this.add.container(x, y);
-    
-    // Guscio esterno
-    this.shellSprite = this.add.ellipse(0, 0, 20, 26, COLORS.egg.shell);
-    this.shellSprite.setStrokeStyle(1, COLORS.egg.embryo, 0.5);
-    
-    // Embrione interno (visibile man mano che si sviluppa)
-    this.embryoSprite = this.add.ellipse(0, 0, 8, 10, COLORS.egg.embryo, 0.3);
-    
-    this.playerEgg.add([this.shellSprite, this.embryoSprite]);
+
+    // Sprite uovo (stadio 1)
+    this.eggSprite = this.add.image(0, 0, 'egg_1');
+    this.eggSprite.setScale(0.05);
+
+    this.playerEgg.add([this.eggSprite]);
     this.playerEgg.setDepth(10);
-    
+
     // Pulsazione vitale
     this.tweens.add({
-      targets: this.playerEgg,
-      scaleX: 1.02,
-      scaleY: 0.98,
+      targets: this.eggSprite,
+      scaleX: 0.051,
+      scaleY: 0.049,
       duration: 1500,
       yoyo: true,
       repeat: -1,
@@ -501,30 +498,21 @@ export class EggScene extends Phaser.Scene {
   }
   
   private updateEmbryoVisual() {
-    const progress = this.developmentStage / EGG_CONFIG.developmentStages;
-    
-    // L'embrione diventa più visibile e grande
-    this.tweens.add({
-      targets: this.embryoSprite,
-      scaleX: 0.5 + progress * 0.8,
-      scaleY: 0.5 + progress * 0.8,
-      alpha: 0.3 + progress * 0.5,
-      duration: 1000,
-    });
-    
-    // Cambia colore gradualmente
-    const newColor = Phaser.Display.Color.Interpolate.ColorWithColor(
-      Phaser.Display.Color.IntegerToColor(COLORS.egg.embryo),
-      Phaser.Display.Color.IntegerToColor(COLORS.egg.developing),
-      100,
-      progress * 100
-    );
-    
-    this.embryoSprite.setFillStyle(
-      Phaser.Display.Color.GetColor(newColor.r, newColor.g, newColor.b),
-      0.3 + progress * 0.5
-    );
-    
+    // Cambia texture in base allo stadio di sviluppo
+    // egg_1: stadi 1-3, egg_2: stadi 4-7, egg_3: stadi 8-10
+    let textureKey: string;
+    if (this.developmentStage <= 3) {
+      textureKey = 'egg_1';
+    } else if (this.developmentStage <= 7) {
+      textureKey = 'egg_2';
+    } else {
+      textureKey = 'egg_3';
+    }
+
+    if (this.eggSprite.texture.key !== textureKey) {
+      this.eggSprite.setTexture(textureKey);
+    }
+
     // Luccichio per feedback crescita!
     if (this.developmentStage > 1) {
       this.emitSparkles();

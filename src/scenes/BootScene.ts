@@ -18,7 +18,6 @@ export class BootScene extends Phaser.Scene {
     this.createLoadingUI();
     
     // Per ora generiamo texture procedurali
-    // In futuro caricheremo sprite pixel art
     this.createProceduralTextures();
   }
   
