@@ -1,0 +1,23 @@
+{
+  "name": "salamandra-cycles",
+  "version": "0.1.0",
+  "description": "Un gioco survival ciclico dove vivi la vita di una salamandra, generazione dopo generazione",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:trial": "VITE_GAME_MODE=trial vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["game", "phaser", "survival", "salamander", "pixel-art"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "phaser": "^3.80.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12"
+  }
+}
