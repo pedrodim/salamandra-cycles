@@ -35,9 +35,12 @@ export class TitleScene extends Phaser.Scene {
   }
   
   create() {
+    // Sfondo nero per le bande sopra e sotto il quadrato
+    this.cameras.main.setBackgroundColor(0x000000);
+
     // Controlla salvataggi
     this.checkSaveData();
-    
+
     // Crea lo sfondo dello stagno asciutto
     this.createDriedPondBackground();
     
@@ -81,20 +84,20 @@ export class TitleScene extends Phaser.Scene {
     
     // Base color - fango secco
     graphics.fillStyle(0x8b7355);
-    graphics.fillRect(0, 0, 400, 600);
-    
+    graphics.fillRect(0, 0, 400, 400);
+
     // Variazioni di colore
     for (let i = 0; i < 50; i++) {
       const shade = 0x7a6548 + Math.floor(Math.random() * 0x202020);
       graphics.fillStyle(shade, 0.3);
       graphics.fillCircle(
         Math.random() * 400,
-        Math.random() * 600,
+        Math.random() * 400,
         20 + Math.random() * 40
       );
     }
-    
-    graphics.generateTexture('driedPond', 400, 600);
+
+    graphics.generateTexture('driedPond', 400, 400);
     graphics.destroy();
   }
   
@@ -129,21 +132,22 @@ export class TitleScene extends Phaser.Scene {
   
   private createDriedPondBackground() {
     // Sfondo base
+    // Quadrato centrato: y va da 100 a 500
     const bg = this.add.image(200, 300, 'driedPond');
     bg.setDepth(-10);
-    
-    // Crepe multiple
+
+    // Crepe multiple (dentro il quadrato 400x400 centrato)
     const crackPositions = [
-      { x: 80, y: 150, angle: 15, scale: 1 },
-      { x: 320, y: 200, angle: -20, scale: 1.2 },
+      { x: 80, y: 200, angle: 15, scale: 1 },
+      { x: 320, y: 250, angle: -20, scale: 1.2 },
       { x: 150, y: 350, angle: 45, scale: 0.8 },
       { x: 280, y: 420, angle: -10, scale: 1.1 },
-      { x: 100, y: 500, angle: 30, scale: 0.9 },
-      { x: 350, y: 480, angle: -35, scale: 1 },
-      { x: 200, y: 250, angle: 0, scale: 1.3 },
+      { x: 100, y: 460, angle: 30, scale: 0.9 },
+      { x: 350, y: 440, angle: -35, scale: 1 },
+      { x: 200, y: 300, angle: 0, scale: 1.3 },
       { x: 60, y: 380, angle: 60, scale: 0.7 },
     ];
-    
+
     crackPositions.forEach(pos => {
       const crack = this.add.image(pos.x, pos.y, 'crack');
       crack.setAngle(pos.angle);
@@ -151,26 +155,26 @@ export class TitleScene extends Phaser.Scene {
       crack.setAlpha(0.6);
       crack.setDepth(-5);
     });
-    
+
     // Bordi più scuri (ombra)
     const vignette = this.add.graphics();
     vignette.fillStyle(0x000000, 0.4);
-    
+
     // Gradiente radiale simulato
-    for (let r = 350; r > 200; r -= 10) {
-      const alpha = (350 - r) / 350 * 0.5;
+    for (let r = 250; r > 100; r -= 10) {
+      const alpha = (250 - r) / 250 * 0.5;
       vignette.fillStyle(0x000000, alpha);
       vignette.fillCircle(200, 300, r);
     }
     vignette.setDepth(-3);
-    
-    // Leggera foschia/polvere
+
+    // Leggera foschia/polvere (dentro il quadrato)
     const dust = this.add.graphics();
     for (let i = 0; i < 30; i++) {
       dust.fillStyle(0xd4c4a8, 0.1 + Math.random() * 0.1);
       dust.fillCircle(
         Math.random() * 400,
-        Math.random() * 600,
+        100 + Math.random() * 400,
         30 + Math.random() * 50
       );
     }
@@ -376,7 +380,24 @@ export class IntroScene extends Phaser.Scene {
   
   create() {
     this.cameras.main.setBackgroundColor(0x000000);
+    this.createSkipButton();
     this.showNextText();
+  }
+
+  private createSkipButton() {
+    const button = this.add.text(200, 560, '[ Skip ]', {
+      fontSize: '12px',
+      color: '#8b9b78',
+      fontFamily: 'monospace',
+    });
+    button.setOrigin(0.5);
+    button.setAlpha(0.5);
+    button.setDepth(100);
+    button.setInteractive({ useHandCursor: true });
+
+    button.on('pointerover', () => button.setAlpha(1));
+    button.on('pointerout', () => button.setAlpha(0.5));
+    button.on('pointerdown', () => this.startGame());
   }
   
   private showNextText() {

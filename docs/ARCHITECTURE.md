@@ -17,7 +17,8 @@
 │ IntroScene    │    │ (salvataggio) │    │ (genetica)    │
 │ EggScene      │    │               │    │               │
 │ LarvaScene    │    │               │    │ gameConfig.ts │
-│ JuvenileScene │    │               │    │ (costanti)    │
+│ PauseScene    │    │               │    │ (costanti)    │
+│ JuvenileScene │    │               │    │               │
 │ AdultScene    │    │               │    │               │
 │ GameOverScene │    │               │    │               │
 └───────────────┘    └───────────────┘    └───────────────┘
@@ -47,6 +48,7 @@ salamandra-cycles/
 │   │   ├── BootScene.ts        # Caricamento assets
 │   │   ├── EggScene.ts         # Fase 1
 │   │   ├── LarvaScene.ts       # Fase 2
+│   │   ├── PauseScene.ts       # Overlay pausa (ESC)
 │   │   ├── JuvenileScene.ts    # Fase 3 (placeholder)
 │   │   └── AdultScene.ts       # Fase 4 (placeholder)
 │   │

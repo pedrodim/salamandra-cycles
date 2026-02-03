@@ -127,6 +127,12 @@ export class LarvaScene extends Phaser.Scene {
       const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
       this.setMoveTarget(worldPoint.x, worldPoint.y);
     });
+
+    // ESC per pausa
+    this.input.keyboard?.on('keydown-ESC', () => {
+      this.scene.pause();
+      this.scene.launch('PauseScene', { parentScene: this.scene.key, gameState: this.gameState });
+    });
   }
   
   private setupTimers() {

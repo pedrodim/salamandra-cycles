@@ -8,7 +8,9 @@ import { TitleScene, IntroScene } from '@/scenes/TitleScene';
 import { BootScene } from '@/scenes/BootScene';
 import { EggScene } from '@/scenes/EggScene';
 import { LarvaScene } from '@/scenes/LarvaScene';
+import { PauseScene } from '@/scenes/PauseScene';
 import { VIEWPORT, COLORS, DEBUG, GAME_MODE } from '@/config/gameConfig';
+import { deleteSave } from '@/systems/GameState';
 
 // Scene placeholder per le fasi non ancora implementate
 class JuvenileScene extends Phaser.Scene {
@@ -84,30 +86,33 @@ class GameOverScene extends Phaser.Scene {
   }
   
   create() {
+    // Cancella il salvataggio della partita
+    deleteSave();
+
     this.cameras.main.setBackgroundColor(0x1a1a1a);
-    
+
     const title = this.add.text(200, 200, 'La tua linea si è estinta', {
       fontSize: '16px',
       color: '#666666',
       fontFamily: 'monospace',
     });
     title.setOrigin(0.5);
-    
+
     const subtitle = this.add.text(200, 240, 'Il ciclo si interrompe qui.', {
       fontSize: '12px',
       color: '#444444',
       fontFamily: 'monospace',
     });
     subtitle.setOrigin(0.5);
-    
+
     // Mostra stats se disponibili
     if (this.gameState && typeof this.gameState === 'object') {
-      const state = this.gameState as { 
-        cyclesCompleted?: number; 
+      const state = this.gameState as {
+        cyclesCompleted?: number;
         player?: { traits?: { generation?: number } };
         pond?: { cycle?: number };
       };
-      
+
       const stats = this.add.text(200, 300, [
         `Cicli completati: ${state.cyclesCompleted || 0}`,
         `Generazione: ${state.player?.traits?.generation || 1}`,
@@ -120,8 +125,8 @@ class GameOverScene extends Phaser.Scene {
       });
       stats.setOrigin(0.5);
     }
-    
-    // Restart button
+
+    // Ricomincia
     const restartBtn = this.add.text(200, 400, '[ Ricomincia ]', {
       fontSize: '14px',
       color: '#8fa67a',
@@ -129,15 +134,13 @@ class GameOverScene extends Phaser.Scene {
     });
     restartBtn.setOrigin(0.5);
     restartBtn.setInteractive({ useHandCursor: true });
-    
+
     restartBtn.on('pointerover', () => restartBtn.setColor('#afc69a'));
     restartBtn.on('pointerout', () => restartBtn.setColor('#8fa67a'));
     restartBtn.on('pointerdown', () => {
-      // Cancella salvataggio e torna al titolo
-      localStorage.removeItem('salamandra_cycles_save');
       this.scene.start('TitleScene');
     });
-    
+
     // Fade in
     this.cameras.main.fadeIn(2000, 0, 0, 0);
   }
@@ -193,6 +196,7 @@ const config: Phaser.Types.Core.GameConfig = {
     JuvenileScene,
     AdultScene,
     GameOverScene,
+    PauseScene,
   ],
   
   // Input

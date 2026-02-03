@@ -180,6 +180,12 @@ export class EggScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-SPACE', () => {
       this.tryShake();
     });
+
+    // ESC per pausa
+    this.input.keyboard?.on('keydown-ESC', () => {
+      this.scene.pause();
+      this.scene.launch('PauseScene', { parentScene: this.scene.key, gameState: this.gameState });
+    });
   }
   
   private setupTimers() {
@@ -245,8 +251,6 @@ export class EggScene extends Phaser.Scene {
     
     // Controlla cooldown
     if (now - this.lastShakeTime < EGG_CONFIG.shakeCooldownMs) {
-      // Feedback che non puoi ancora
-      this.cameras.main.shake(50, 0.002);
       return;
     }
     
