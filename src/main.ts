@@ -12,6 +12,23 @@ import { PauseScene } from '@/scenes/PauseScene';
 import { COLORS, DEBUG, GAME_MODE } from '@/config/gameConfig';
 import { deleteSave } from '@/systems/GameState';
 
+// Fix testi sfuocati su display HiDPI (#3)
+// Phaser Text usa resolution 1 di default, causando sfuocatura su schermi Retina/HiDPI.
+// Override della factory per applicare automaticamente devicePixelRatio.
+const _dpr = window.devicePixelRatio || 1;
+if (_dpr > 1) {
+  const _origTextFactory = Phaser.GameObjects.GameObjectFactory.prototype.text;
+  Phaser.GameObjects.GameObjectFactory.prototype.text = function (
+    this: Phaser.GameObjects.GameObjectFactory,
+    x: number,
+    y: number,
+    text: string | string[],
+    style?: Phaser.Types.GameObjects.Text.TextStyle
+  ) {
+    return _origTextFactory.call(this, x, y, text, { ...style, resolution: _dpr });
+  };
+}
+
 // Scene placeholder per le fasi non ancora implementate
 class JuvenileScene extends Phaser.Scene {
   constructor() {
