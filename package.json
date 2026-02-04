@@ -7,9 +7,16 @@
     "dev": "vite",
     "dev:trial": "VITE_GAME_MODE=trial vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "surge": "pnpm build && cp dist/index.html dist/200.html && surge dist cycles.pedrodim.dev"
   },
-  "keywords": ["game", "phaser", "survival", "salamander", "pixel-art"],
+  "keywords": [
+    "game",
+    "phaser",
+    "survival",
+    "salamander",
+    "pixel-art"
+  ],
   "author": "",
   "license": "MIT",
   "packageManager": "pnpm@9.15.4",
@@ -18,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
+    "surge": "^0.24.6",
     "typescript": "^5.3.3",
     "vite": "^5.0.12"
   }

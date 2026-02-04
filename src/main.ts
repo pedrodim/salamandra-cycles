@@ -9,7 +9,7 @@ import { BootScene } from '@/scenes/BootScene';
 import { EggScene } from '@/scenes/EggScene';
 import { LarvaScene } from '@/scenes/LarvaScene';
 import { PauseScene } from '@/scenes/PauseScene';
-import { VIEWPORT, COLORS, DEBUG, GAME_MODE } from '@/config/gameConfig';
+import { COLORS, DEBUG, GAME_MODE } from '@/config/gameConfig';
 import { deleteSave } from '@/systems/GameState';
 
 // Scene placeholder per le fasi non ancora implementate

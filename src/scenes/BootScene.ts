@@ -84,7 +84,7 @@ export class BootScene extends Phaser.Scene {
   }
   
   private generateSparkTexture() {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+    const graphics = this.make.graphics({ x: 0, y: 0 }, false);
     
     // Stella a 4 punte
     graphics.fillStyle(0xffffff);
@@ -103,7 +103,7 @@ export class BootScene extends Phaser.Scene {
   }
   
   private generateBubbleTexture() {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+    const graphics = this.make.graphics({ x: 0, y: 0 }, false);
     
     // Bolla con riflesso
     graphics.fillStyle(0xffffff, 0.3);
@@ -117,7 +117,7 @@ export class BootScene extends Phaser.Scene {
   }
   
   private generateEggTexture() {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+    const graphics = this.make.graphics({ x: 0, y: 0 }, false);
     
     // Uovo stilizzato
     graphics.fillStyle(COLORS.egg.shell);
@@ -143,7 +143,7 @@ export class BootScene extends Phaser.Scene {
   }
   
   private generateLarvaTexture() {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+    const graphics = this.make.graphics({ x: 0, y: 0 }, false);
     
     // Corpo piccolo con branchie
     graphics.fillStyle(COLORS.salamander.body);
@@ -179,7 +179,7 @@ export class BootScene extends Phaser.Scene {
   }
   
   private generateJuvenileTexture() {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+    const graphics = this.make.graphics({ x: 0, y: 0 }, false);
     
     // Salamandra giovane - più definita
     graphics.fillStyle(COLORS.salamander.body);
@@ -215,7 +215,7 @@ export class BootScene extends Phaser.Scene {
   }
   
   private generateAdultTexture() {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+    const graphics = this.make.graphics({ x: 0, y: 0 }, false);
     
     // Salamandra adulta - completa
     graphics.fillStyle(COLORS.salamander.body);
@@ -303,14 +303,14 @@ export class BootScene extends Phaser.Scene {
     info.setOrigin(0.5, 0);
     
     // Bottoni
-    const continueBtn = this.createButton(
+    this.createButton(
       width / 2 - 60,
       height / 2 + 40,
       'Continua',
       () => this.startGame(gameState)
     );
     
-    const newGameBtn = this.createButton(
+    this.createButton(
       width / 2 + 60,
       height / 2 + 40,
       'Nuovo',

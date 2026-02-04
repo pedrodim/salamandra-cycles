@@ -52,9 +52,7 @@ export class LarvaScene extends Phaser.Scene {
   private currentViewportSize: number = VIEWPORT.larva.initial;
   
   // Timer
-  private phaseTimer!: Phaser.Time.TimerEvent;
   private hungerTimer!: Phaser.Time.TimerEvent;
-  private foodSpawnTimer!: Phaser.Time.TimerEvent;
   
   // Stato
   private isHiding: boolean = false;
@@ -138,7 +136,7 @@ export class LarvaScene extends Phaser.Scene {
   private setupTimers() {
     const phaseDurationMs = CURRENT_DURATION.larva * MS_PER_MINUTE;
     
-    this.phaseTimer = this.time.addEvent({
+    this.time.addEvent({
       delay: phaseDurationMs,
       callback: this.onPhaseComplete,
       callbackScope: this,
@@ -151,7 +149,7 @@ export class LarvaScene extends Phaser.Scene {
       loop: true,
     });
     
-    this.foodSpawnTimer = this.time.addEvent({
+    this.time.addEvent({
       delay: 5000,
       callback: this.spawnFood,
       callbackScope: this,

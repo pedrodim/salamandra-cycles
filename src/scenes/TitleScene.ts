@@ -5,7 +5,6 @@
  */
 
 import Phaser from 'phaser';
-import { COLORS } from '@/config/gameConfig';
 import { createInitialGameState, loadGame, GameState } from '@/systems/GameState';
 
 // Chiave per salvare lo stato New Game+
@@ -83,7 +82,7 @@ export class TitleScene extends Phaser.Scene {
   // ============================================
   
   private createDriedPondTexture() {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+    const graphics = this.make.graphics({ x: 0, y: 0 }, false);
     
     // Base color - fango secco
     graphics.fillStyle(0x8b7355);
@@ -105,7 +104,7 @@ export class TitleScene extends Phaser.Scene {
   }
   
   private createCrackTextures() {
-    const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+    const graphics = this.make.graphics({ x: 0, y: 0 }, false);
     
     // Crepa singola
     graphics.lineStyle(2, 0x5a4a3a, 0.8);
@@ -251,7 +250,7 @@ export class TitleScene extends Phaser.Scene {
     
     // New Game+ (solo se sbloccato)
     if (this.canNewGamePlus) {
-      const ngpButton = this.createMenuButton(cx, currentY, 'New Game+', () => {
+      this.createMenuButton(cx, currentY, 'New Game+', () => {
         this.startIntroSequence(true);
       }, true);  // Stile speciale
       currentY += spacing;

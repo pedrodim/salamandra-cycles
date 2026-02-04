@@ -57,3 +57,4 @@ JuvenileScene, AdultScene e GameOverScene sono placeholder definiti in `main.ts`
 - Nessuna barra vita/fame visibile: feedback solo visuale sul personaggio
 - Path alias: `@/` mappa a `src/` (configurato in tsconfig e vite)
 - Quando una modifica ha impatto su architettura, scene, flussi o struttura del progetto, aggiornare i file in `docs/` (ARCHITECTURE.md, GAME_DESIGN_DOCUMENT.md, CHANGELOG.md)
+- Dopo ogni modifica al codice, verificare che `tsc` compili senza errori (`pnpm build` o `npx tsc --noEmit`)

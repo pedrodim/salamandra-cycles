@@ -18,7 +18,7 @@ export class EggScene extends Phaser.Scene {
   
   // Predatori
   private predatorShadow: Phaser.GameObjects.Ellipse | null = null;
-  private predatorWarning = false;
+  // predatorWarning: TODO - usato quando i predatori saranno attivi
   
   // Camera e viewport
   private currentViewportSize: number = VIEWPORT.egg.initial;
@@ -37,7 +37,6 @@ export class EggScene extends Phaser.Scene {
   private energyDrainTimer!: Phaser.Time.TimerEvent;
   
   // Effetti
-  private particles!: Phaser.GameObjects.Particles.ParticleEmitter;
   
   constructor() {
     super({ key: 'EggScene' });
@@ -234,7 +233,7 @@ export class EggScene extends Phaser.Scene {
   
   private setupParticles() {
     // Particelle per luccichio
-    this.particles = this.add.particles(0, 0, 'spark', {
+    this.add.particles(0, 0, 'spark', {
       // Configurazione sarà aggiunta quando creiamo gli asset
       lifespan: 800,
       speed: { min: 10, max: 30 },
@@ -244,7 +243,7 @@ export class EggScene extends Phaser.Scene {
     });
     
     // Per ora usiamo un placeholder grafico
-    const sparkTexture = this.make.graphics({ x: 0, y: 0, add: false });
+    const sparkTexture = this.make.graphics({ x: 0, y: 0 }, false);
     sparkTexture.fillStyle(0xffffff);
     sparkTexture.fillCircle(4, 4, 4);
     sparkTexture.generateTexture('spark', 8, 8);
