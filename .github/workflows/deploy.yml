@@ -23,5 +23,6 @@ jobs:
 
       - name: Deploy to Surge
         run: |
+          echo "::add-mask::${{ secrets.SURGE_EMAIL }}"
           cp dist/index.html dist/200.html
           npx surge dist cycles.pedrodim.dev --token ${{ secrets.SURGE_TOKEN }}
