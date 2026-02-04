@@ -916,7 +916,7 @@ export class DevToolsScene extends Phaser.Scene {
     const keys = ['EggScene', 'LarvaScene', 'JuvenileScene', 'AdultScene', 'GameOverScene'];
     for (const key of keys) {
       const scene = this.scene.manager.getScene(key);
-      if (scene && scene.scene.isActive()) {
+      if (scene && (scene.scene.isActive() || scene.scene.isPaused())) {
         return scene;
       }
     }
