@@ -9,6 +9,7 @@ pnpm dev          # Avvia dev server (http://localhost:3000)
 pnpm dev:trial    # Avvia in modalità trial (cicli veloci, debug attivo)
 pnpm build        # Build produzione (tsc + vite build)
 pnpm preview      # Preview build locale
+pnpm surge        # Build + deploy su cycles.pedrodim.dev via surge.sh
 ```
 
 ## Struttura
@@ -16,6 +17,7 @@ pnpm preview      # Preview build locale
 ```
 src/
   main.ts                  # Entry point, config Phaser, scene placeholder
+  vite-env.d.ts            # Tipi Vite (import.meta.env/hot)
   config/gameConfig.ts     # Tutte le costanti e parametri di bilanciamento
   data/traits.ts           # Sistema genetico
   systems/GameState.ts     # Stato globale e salvataggio (localStorage)
@@ -56,5 +58,10 @@ JuvenileScene, AdultScene e GameOverScene sono placeholder definiti in `main.ts`
 - Lingua del codice: commenti e stringhe UI in italiano
 - Nessuna barra vita/fame visibile: feedback solo visuale sul personaggio
 - Path alias: `@/` mappa a `src/` (configurato in tsconfig e vite)
-- Quando una modifica ha impatto su architettura, scene, flussi o struttura del progetto, aggiornare i file in `docs/` (ARCHITECTURE.md, GAME_DESIGN_DOCUMENT.md, CHANGELOG.md)
-- Dopo ogni modifica al codice, verificare che `tsc` compili senza errori (`pnpm build` o `npx tsc --noEmit`)
+
+## IMPORTANTE: checklist pre-commit
+
+Queste regole vanno SEMPRE seguite prima di ogni commit:
+
+1. **Verificare TypeScript**: eseguire `npx tsc --noEmit` e correggere tutti gli errori prima di committare
+2. **Aggiornare docs/**: se la modifica ha impatto su architettura, scene, flussi o struttura del progetto, aggiornare i file in `docs/` (ARCHITECTURE.md, GAME_DESIGN_DOCUMENT.md, CHANGELOG.md)
