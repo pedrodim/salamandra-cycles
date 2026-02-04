@@ -325,28 +325,29 @@ class PhaseScene extends Phaser.Scene {
 ```typescript
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
-  
-  // Pixel art
-  pixelArt: true,
-  antialias: false,
-  roundPixels: true,
-  
-  // Dimensioni
-  width: 400,
-  height: 600,
-  
-  // Scaling responsivo
+
+  // Canvas fullscreen
+  width: '100%',
+  height: '100%',
+
+  // Rendering (no pixel art)
+  pixelArt: false,
+  antialias: true,
+  roundPixels: false,
+  backgroundColor: 0x000000,
+
+  // Scaling: riempie la finestra
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  
+
   // Physics semplice (no gravità)
   physics: {
     default: 'arcade',
     arcade: { gravity: { x: 0, y: 0 } },
   },
-  
+
   // Scene in ordine
   scene: [
     TitleScene,
@@ -357,6 +358,7 @@ const config: Phaser.Types.Core.GameConfig = {
     JuvenileScene,
     AdultScene,
     GameOverScene,
+    PauseScene,
   ],
 };
 ```
@@ -426,25 +428,25 @@ shakeGrowth() {
 
 ## Camera e Viewport
 
-### Zoom Dinamico
+### Viewport Dinamico (EggScene)
 
 ```typescript
-// Viewport espresso in pixel visibili
-// Zoom calcolato come: maxWidth / viewportSize
+// Il viewport su schermo è un quadrato centrato che cresce
+// screenViewportSize: dimensione su schermo (35% → 75% di min(width, height))
+// currentViewportSize: dimensione mondo visibile (64 → 96 pixel)
+// zoom = screenViewportSize / currentViewportSize
 
 expandViewport(progress: number) {
-  const targetSize = Phaser.Math.Linear(
-    VIEWPORT.larva.initial,  // 96
-    VIEWPORT.larva.final,    // 160
-    progress
-  );
-  
-  const newZoom = VIEWPORT.maxWidth / targetSize;
-  
+  const maxSquare = Math.min(this.scale.width, this.scale.height);
+  const targetScreenSize = Phaser.Math.Linear(maxSquare * 0.35, maxSquare * 0.75, progress);
+  const targetWorldSize = Phaser.Math.Linear(VIEWPORT.egg.initial, VIEWPORT.egg.final, progress);
+
   this.tweens.add({
-    targets: this.cameras.main,
-    zoom: newZoom,
-    duration: 1500,
+    targets: this,
+    screenViewportSize: targetScreenSize,
+    currentViewportSize: targetWorldSize,
+    duration: 2000,
+    onUpdate: () => this.applyViewport(),
   });
 }
 ```
@@ -527,7 +529,7 @@ game.scene.getScene('EggScene').gameState  // Stato corrente
 
 ### Ottimizzazioni Applicate
 
-1. **Pixel art mode** - No antialiasing, rendering ottimizzato
+1. **Antialias mode** - Rendering smooth per sprite ad alta risoluzione
 2. **Object pooling** - (TODO) Per particelle e proiettili
 3. **Lazy loading** - Assets caricati on-demand
 4. **Minimal DOM** - Solo un canvas

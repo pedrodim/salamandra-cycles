@@ -25,12 +25,15 @@ export class PauseScene extends Phaser.Scene {
   }
 
   create() {
+    const cx = this.scale.width / 2;
+    const cy = this.scale.height / 2;
+
     // Sfondo semi-trasparente
-    const overlay = this.add.rectangle(200, 300, 400, 600, 0x000000, 0.7);
+    const overlay = this.add.rectangle(cx, cy, this.scale.width, this.scale.height, 0x000000, 0.7);
     overlay.setDepth(200);
 
     // Titolo
-    const title = this.add.text(200, 220, 'Pausa', {
+    const title = this.add.text(cx, cy - 80, 'Pausa', {
       fontSize: '24px',
       color: '#c9d4b8',
       fontFamily: 'monospace',
@@ -46,7 +49,7 @@ export class PauseScene extends Phaser.Scene {
     const sec = totalSec % 60;
     const timeStr = `${min}:${sec.toString().padStart(2, '0')}`;
 
-    const info = this.add.text(200, 260, `Ciclo ${cycle}  ·  ${timeStr}`, {
+    const info = this.add.text(cx, cy - 40, `Ciclo ${cycle}  ·  ${timeStr}`, {
       fontSize: '12px',
       color: '#8b9b78',
       fontFamily: 'monospace',
@@ -55,8 +58,8 @@ export class PauseScene extends Phaser.Scene {
     info.setDepth(201);
 
     // Bottoni
-    this.createButton(200, 320, 'Riprendi', () => this.resumeGame());
-    this.createButton(200, 370, 'Esci', () => this.quitToMenu());
+    this.createButton(cx, cy + 20, 'Riprendi', () => this.resumeGame());
+    this.createButton(cx, cy + 70, 'Esci', () => this.quitToMenu());
 
     // ESC per riprendere
     this.input.keyboard?.on('keydown-ESC', () => {

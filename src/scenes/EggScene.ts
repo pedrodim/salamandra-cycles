@@ -22,6 +22,7 @@ export class EggScene extends Phaser.Scene {
   
   // Camera e viewport
   private currentViewportSize: number = VIEWPORT.egg.initial;
+  private screenViewportSize: number = 0;
   
   // Stato locale
   private energy: number = EGG_CONFIG.maxEnergy;
@@ -84,16 +85,27 @@ export class EggScene extends Phaser.Scene {
   
   private setupCamera() {
     const cam = this.cameras.main;
-    
-    // Centra la camera sull'uovo del giocatore
+    const maxSquare = Math.min(this.scale.width, this.scale.height);
+
+    // Inizia piccolo: 35% dello spazio disponibile, cresce fino a ~75%
+    this.screenViewportSize = maxSquare * 0.35;
+    this.applyViewport();
+
     cam.centerOn(this.gameState.player.x, this.gameState.player.y);
-    
-    // Zoom iniziale per viewport piccolo
-    const zoomLevel = VIEWPORT.maxWidth / this.currentViewportSize;
-    cam.setZoom(zoomLevel);
-    
-    // Tinta iniziale calda (dentro l'uovo)
     cam.setBackgroundColor(COLORS.water.deep);
+  }
+
+  private applyViewport() {
+    const cam = this.cameras.main;
+    const { width, height } = this.scale;
+    const size = this.screenViewportSize;
+    const offsetX = (width - size) / 2;
+    const offsetY = (height - size) / 2;
+    cam.setViewport(offsetX, offsetY, size, size);
+    cam.setZoom(size / this.currentViewportSize);
+    if (this.gameState?.player) {
+      cam.centerOn(this.gameState.player.x, this.gameState.player.y);
+    }
   }
   
   private createWaterBackground() {
@@ -521,22 +533,25 @@ export class EggScene extends Phaser.Scene {
   
   private expandViewport() {
     const progress = this.developmentStage / EGG_CONFIG.developmentStages;
-    const targetSize = Phaser.Math.Linear(
+    const targetWorldSize = Phaser.Math.Linear(
       VIEWPORT.egg.initial,
       VIEWPORT.egg.final,
       progress
     );
-    
-    const newZoom = VIEWPORT.maxWidth / targetSize;
-    
+
+    const maxSquare = Math.min(this.scale.width, this.scale.height);
+    const targetScreenSize = Phaser.Math.Linear(maxSquare * 0.35, maxSquare * 0.75, progress);
+
     this.tweens.add({
-      targets: this.cameras.main,
-      zoom: newZoom,
+      targets: this,
+      screenViewportSize: targetScreenSize,
+      currentViewportSize: targetWorldSize,
       duration: 2000,
       ease: 'Sine.easeInOut',
+      onUpdate: () => {
+        this.applyViewport();
+      },
     });
-    
-    this.currentViewportSize = targetSize;
   }
   
   private showShakeHint() {

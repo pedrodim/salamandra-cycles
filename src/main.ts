@@ -151,30 +151,22 @@ const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game-container',
   
-  // Dimensioni base - il gioco scalerà
-  width: VIEWPORT.maxWidth,
-  height: VIEWPORT.maxHeight,
-  
+  // Canvas occupa tutta la finestra
+  width: '100%',
+  height: '100%',
+
   // Rendering
   pixelArt: false,
   antialias: true,
   roundPixels: false,
-  
+
   // Colore sfondo
-  backgroundColor: COLORS.water.deep,
-  
-  // Scaling per responsività
+  backgroundColor: 0x000000,
+
+  // Scaling: riempie la finestra
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    min: {
-      width: 320,
-      height: 480,
-    },
-    max: {
-      width: 800,
-      height: 1200,
-    },
   },
   
   // Physics (per collisioni semplici)

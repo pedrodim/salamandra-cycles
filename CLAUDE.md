@@ -31,14 +31,16 @@ JuvenileScene, AdultScene e GameOverScene sono placeholder definiti in `main.ts`
 
 ## Canvas e viewport
 
-- Canvas: 400x600, pixel art mode, scale FIT con center both
-- Il viewport di gioco si espande progressivamente durante le fasi (zoom camera dinamico)
-- Le dimensioni viewport per fase sono in `VIEWPORT` dentro `gameConfig.ts`
+- Canvas: fullscreen (`width: '100%'`, `height: '100%'`), scale RESIZE, sfondo nero
+- Pixel art disabilitato (`pixelArt: false`, `antialias: true`)
+- Le scene usano coordinate dinamiche (`this.scale.width/height`) e non valori hardcoded
+- EggScene usa `cam.setViewport()` per creare un viewport quadrato centrato che parte piccolo (35%) e cresce (75%)
+- Le dimensioni viewport mondo per fase sono in `VIEWPORT` dentro `gameConfig.ts`
 
 ## Scene
 
 - Le scene di gameplay ricevono `{ gameState: GameState }` via `init(data)`
-- PauseScene si sovrappone alla scena attiva tramite `scene.launch()` / `scene.pause()`, riceve `{ parentScene: string }`
+- PauseScene si sovrappone alla scena attiva tramite `scene.launch()` / `scene.pause()`, riceve `{ parentScene: string, gameState: GameState }`
 - TitleScene e IntroScene sono nello stesso file (`TitleScene.ts`)
 - Transizioni tra scene usano `cameras.main.fadeIn/fadeOut`
 

@@ -1,6 +1,31 @@
 # 📝 Changelog e Note di Sviluppo
 
-## Versione 0.2.0 (Corrente)
+## Versione 0.3.0 (Corrente)
+
+### Nuove Funzionalità
+
+#### Canvas Fullscreen
+- Il canvas ora occupa tutta la finestra del browser (`Phaser.Scale.RESIZE`)
+- Tutte le scene usano coordinate dinamiche (`this.scale.width/height`)
+- Sfondo canvas nero, ogni scena gestisce il proprio viewport
+
+#### Viewport Quadrato (EggScene)
+- L'EggScene usa `cam.setViewport()` per un quadrato centrato
+- Il viewport parte piccolo (35% dello schermo) e cresce fino al 75%
+- Sia la dimensione su schermo che la dimensione mondo si espandono durante lo sviluppo
+
+#### Sprite Uova
+- Aggiunte 3 sprite uovo (egg_1, egg_2, egg_3) per gli stadi di sviluppo
+- Disabilitato pixel art mode, attivato antialias per rendering smooth
+
+### Modifiche
+- PauseScene ora riceve anche `gameState` e mostra ciclo attuale e tempo trascorso
+- IntroScene: aggiunto bottone Skip
+- PauseScene e TitleScene: coordinate dinamiche per supporto fullscreen
+
+---
+
+## Versione 0.2.0
 
 ### Nuove Funzionalità
 

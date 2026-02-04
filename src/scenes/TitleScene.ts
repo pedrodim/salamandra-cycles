@@ -35,20 +35,23 @@ export class TitleScene extends Phaser.Scene {
   }
   
   create() {
-    // Sfondo nero per le bande sopra e sotto il quadrato
     this.cameras.main.setBackgroundColor(0x000000);
+
+    // Centro della finestra
+    const cx = this.scale.width / 2;
+    const cy = this.scale.height / 2;
 
     // Controlla salvataggi
     this.checkSaveData();
 
     // Crea lo sfondo dello stagno asciutto
-    this.createDriedPondBackground();
-    
+    this.createDriedPondBackground(cx, cy);
+
     // Titolo
-    this.createTitle();
-    
+    this.createTitle(cx, cy);
+
     // Menu
-    this.createMenu();
+    this.createMenu(cx, cy);
     
     // Fade in
     this.cameras.main.fadeIn(2000, 20, 15, 10);
@@ -84,7 +87,7 @@ export class TitleScene extends Phaser.Scene {
     
     // Base color - fango secco
     graphics.fillStyle(0x8b7355);
-    graphics.fillRect(0, 0, 400, 400);
+    graphics.fillRect(0, 0, 400, 600);
 
     // Variazioni di colore
     for (let i = 0; i < 50; i++) {
@@ -92,12 +95,12 @@ export class TitleScene extends Phaser.Scene {
       graphics.fillStyle(shade, 0.3);
       graphics.fillCircle(
         Math.random() * 400,
-        Math.random() * 400,
+        Math.random() * 600,
         20 + Math.random() * 40
       );
     }
 
-    graphics.generateTexture('driedPond', 400, 400);
+    graphics.generateTexture('driedPond', 400, 600);
     graphics.destroy();
   }
   
@@ -130,22 +133,25 @@ export class TitleScene extends Phaser.Scene {
     graphics.destroy();
   }
   
-  private createDriedPondBackground() {
-    // Sfondo base
-    // Quadrato centrato: y va da 100 a 500
-    const bg = this.add.image(200, 300, 'driedPond');
+  private createDriedPondBackground(cx: number, cy: number) {
+    const w = this.scale.width;
+    const h = this.scale.height;
+
+    // Sfondo scala per coprire tutta la finestra
+    const bg = this.add.image(cx, cy, 'driedPond');
+    bg.setScale(Math.max(w / 400, h / 600));
     bg.setDepth(-10);
 
-    // Crepe multiple (dentro il quadrato 400x400 centrato)
+    // Crepe multiple (relative al centro)
     const crackPositions = [
-      { x: 80, y: 200, angle: 15, scale: 1 },
-      { x: 320, y: 250, angle: -20, scale: 1.2 },
-      { x: 150, y: 350, angle: 45, scale: 0.8 },
-      { x: 280, y: 420, angle: -10, scale: 1.1 },
-      { x: 100, y: 460, angle: 30, scale: 0.9 },
-      { x: 350, y: 440, angle: -35, scale: 1 },
-      { x: 200, y: 300, angle: 0, scale: 1.3 },
-      { x: 60, y: 380, angle: 60, scale: 0.7 },
+      { x: cx - 120, y: cy - 150, angle: 15, scale: 1 },
+      { x: cx + 120, y: cy - 100, angle: -20, scale: 1.2 },
+      { x: cx - 50, y: cy + 50, angle: 45, scale: 0.8 },
+      { x: cx + 80, y: cy + 120, angle: -10, scale: 1.1 },
+      { x: cx - 100, y: cy + 200, angle: 30, scale: 0.9 },
+      { x: cx + 150, y: cy + 180, angle: -35, scale: 1 },
+      { x: cx, y: cy - 50, angle: 0, scale: 1.3 },
+      { x: cx - 140, y: cy + 80, angle: 60, scale: 0.7 },
     ];
 
     crackPositions.forEach(pos => {
@@ -158,23 +164,21 @@ export class TitleScene extends Phaser.Scene {
 
     // Bordi più scuri (ombra)
     const vignette = this.add.graphics();
-    vignette.fillStyle(0x000000, 0.4);
-
-    // Gradiente radiale simulato
-    for (let r = 250; r > 100; r -= 10) {
-      const alpha = (250 - r) / 250 * 0.5;
+    const maxR = Math.max(w, h) * 0.6;
+    for (let r = maxR; r > maxR * 0.5; r -= 10) {
+      const alpha = (maxR - r) / maxR * 0.5;
       vignette.fillStyle(0x000000, alpha);
-      vignette.fillCircle(200, 300, r);
+      vignette.fillCircle(cx, cy, r);
     }
     vignette.setDepth(-3);
 
-    // Leggera foschia/polvere (dentro il quadrato)
+    // Leggera foschia/polvere
     const dust = this.add.graphics();
     for (let i = 0; i < 30; i++) {
       dust.fillStyle(0xd4c4a8, 0.1 + Math.random() * 0.1);
       dust.fillCircle(
-        Math.random() * 400,
-        100 + Math.random() * 400,
+        Math.random() * w,
+        Math.random() * h,
         30 + Math.random() * 50
       );
     }
@@ -185,9 +189,9 @@ export class TitleScene extends Phaser.Scene {
   // TITOLO
   // ============================================
   
-  private createTitle() {
+  private createTitle(cx: number, cy: number) {
     // Titolo principale
-    const title = this.add.text(200, 150, 'Salamandra', {
+    const title = this.add.text(cx, cy - 150, 'Salamandra', {
       fontSize: '36px',
       color: '#c9d4b8',
       fontFamily: 'Georgia, serif',
@@ -197,7 +201,7 @@ export class TitleScene extends Phaser.Scene {
     title.setShadow(2, 2, '#2a2a1a', 4);
     
     // Sottotitolo
-    const subtitle = this.add.text(200, 195, 'Cicli di Vita', {
+    const subtitle = this.add.text(cx, cy - 105, 'Cicli di Vita', {
       fontSize: '16px',
       color: '#8b9b78',
       fontFamily: 'Georgia, serif',
@@ -207,8 +211,8 @@ export class TitleScene extends Phaser.Scene {
     // Linea decorativa
     const line = this.add.graphics();
     line.lineStyle(1, 0x8b9b78, 0.5);
-    line.moveTo(100, 220);
-    line.lineTo(300, 220);
+    line.moveTo(cx - 100, cy - 80);
+    line.lineTo(cx + 100, cy - 80);
     line.strokePath();
     
     // Animazione leggera sul titolo
@@ -226,20 +230,20 @@ export class TitleScene extends Phaser.Scene {
   // MENU
   // ============================================
   
-  private createMenu() {
-    const menuY = 350;
+  private createMenu(cx: number, cy: number) {
+    const menuY = cy + 50;
     const spacing = 50;
     let currentY = menuY;
-    
+
     // Nuovo Ciclo (sempre visibile)
-    this.createMenuButton(200, currentY, 'Nuovo Ciclo', () => {
+    this.createMenuButton(cx, currentY, 'Nuovo Ciclo', () => {
       this.startIntroSequence(false);
     });
     currentY += spacing;
     
     // Continua (solo se c'è salvataggio)
     if (this.canContinue) {
-      this.createMenuButton(200, currentY, 'Continua', () => {
+      this.createMenuButton(cx, currentY, 'Continua', () => {
         this.continueGame();
       });
       currentY += spacing;
@@ -247,14 +251,14 @@ export class TitleScene extends Phaser.Scene {
     
     // New Game+ (solo se sbloccato)
     if (this.canNewGamePlus) {
-      const ngpButton = this.createMenuButton(200, currentY, 'New Game+', () => {
+      const ngpButton = this.createMenuButton(cx, currentY, 'New Game+', () => {
         this.startIntroSequence(true);
       }, true);  // Stile speciale
       currentY += spacing;
       
       // Info era
       if (this.newGamePlusData) {
-        const eraText = this.add.text(200, currentY - 15, `Era ${this.newGamePlusData.era + 1}`, {
+        const eraText = this.add.text(cx, currentY - 15, `Era ${this.newGamePlusData.era + 1}`, {
           fontSize: '10px',
           color: '#6b7b58',
           fontFamily: 'monospace',
@@ -385,7 +389,7 @@ export class IntroScene extends Phaser.Scene {
   }
 
   private createSkipButton() {
-    const button = this.add.text(200, 560, '[ Skip ]', {
+    const button = this.add.text(this.scale.width / 2, this.scale.height - 40, '[ Skip ]', {
       fontSize: '12px',
       color: '#8b9b78',
       fontFamily: 'monospace',
@@ -415,7 +419,7 @@ export class IntroScene extends Phaser.Scene {
       return;
     }
     
-    const displayText = this.add.text(200, 300, text, {
+    const displayText = this.add.text(this.scale.width / 2, this.scale.height / 2, text, {
       fontSize: '14px',
       color: '#8b9b78',
       fontFamily: 'Georgia, serif',
@@ -453,7 +457,7 @@ export class IntroScene extends Phaser.Scene {
   
   private startGame() {
     // Transizione finale - luce che appare
-    const light = this.add.circle(200, 300, 5, 0x8fa67a, 0);
+    const light = this.add.circle(this.scale.width / 2, this.scale.height / 2, 5, 0x8fa67a, 0);
     
     this.tweens.add({
       targets: light,
