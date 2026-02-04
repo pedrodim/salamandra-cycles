@@ -12,6 +12,10 @@ on:
       - vite.config.ts
       - tsconfig.json
 
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 env:
   PREVIEW_DOMAIN: ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}.surge.sh
 
