@@ -18,9 +18,12 @@
 │ EggScene      │    │               │    │               │
 │ LarvaScene    │    │               │    │ gameConfig.ts │
 │ PauseScene    │    │               │    │ (costanti)    │
+│ DevToolsScene*│    │               │    │               │
 │ JuvenileScene │    │               │    │               │
 │ AdultScene    │    │               │    │               │
 │ GameOverScene │    │               │    │               │
+│               │    │               │    │               │
+│ * solo DEV    │    │               │    │               │
 └───────────────┘    └───────────────┘    └───────────────┘
 ```
 
@@ -49,6 +52,7 @@ salamandra-cycles/
 │   │   ├── EggScene.ts         # Fase 1
 │   │   ├── LarvaScene.ts       # Fase 2
 │   │   ├── PauseScene.ts       # Overlay pausa (ESC)
+│   │   ├── DevToolsScene.ts    # Dev tools (solo DEV build)
 │   │   ├── JuvenileScene.ts    # Fase 3 (placeholder)
 │   │   └── AdultScene.ts       # Fase 4 (placeholder)
 │   │
@@ -512,6 +516,21 @@ Differenze:
 - Cicli 2.5x più veloci
 - Debug overlay abilitato
 - Console logging attivo
+
+### Dev Tools (solo build sviluppo)
+
+In qualsiasi build di sviluppo (`pnpm dev` o `pnpm dev:trial`), è disponibile
+un pannello strumenti sviluppatore attivabile con il tasto **backtick (`)**.
+
+**Funzionalità:**
+- **Scene Control** - Navigazione diretta a qualsiasi scena/fase
+- **Stats Editor** - Modifica in tempo reale di vitali, stats, mutazioni, stagno
+- **Time Control** - Velocità (0.25x–8x), pausa, frame-step, avanzamento tempo
+- **Save Management** - Export/import JSON, download file, copia clipboard
+- **Debug Overlay** - FPS, stato giocatore, hitboxes, info camera, bordi viewport, log eventi
+
+Il pannello è gated con `import.meta.env.DEV` e importato dinamicamente,
+quindi viene completamente eliminato dal bundle di produzione (tree-shaking).
 
 ### Debug Console
 

@@ -1,6 +1,23 @@
 # 📝 Changelog e Note di Sviluppo
 
-## Versione 0.3.0 (Corrente)
+## Versione 0.4.0 (Corrente)
+
+### Nuove Funzionalità
+
+#### Dev Tools in-game (solo build sviluppo)
+- Pannello strumenti sviluppatore attivabile con tasto backtick (`)
+- **Scene Control**: navigazione diretta a qualsiasi scena con stato personalizzabile
+- **Stats Editor**: modifica in tempo reale di vitali, stats genetici, mutazioni, parametri stagno
+- **Time Control**: velocità 0.25x–8x, pausa, frame-step, avanzamento tempo configurabile
+- **Save Management**: export/import JSON, download file, copia clipboard, cancellazione save
+- **Debug Overlay**: FPS, stato giocatore live, hitboxes physics, info camera, bordi viewport, log eventi
+- Importato dinamicamente con `import.meta.env.DEV`, eliminato completamente in produzione
+- Intercettazione console.log per visualizzazione log in-game
+- Aggiornamento live dei valori nel pannello stats
+
+---
+
+## Versione 0.3.0
 
 ### Nuove Funzionalità
 

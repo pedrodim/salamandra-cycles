@@ -228,6 +228,13 @@ const config: Phaser.Types.Core.GameConfig = {
 // Avvia il gioco
 const game = new Phaser.Game(config);
 
+// Dev tools - solo in development, tree-shaken in produzione
+if (import.meta.env.DEV) {
+  import('@/scenes/DevToolsScene').then(({ DevToolsScene }) => {
+    game.scene.add('DevToolsScene', DevToolsScene, true);
+  });
+}
+
 // Debug info
 if (DEBUG.enabled) {
   console.log(`
@@ -237,7 +244,7 @@ if (DEBUG.enabled) {
   ║  Debug: ${DEBUG.enabled ? 'ON' : 'OFF'}                           ║
   ╚═══════════════════════════════════════╝
   `);
-  
+
   // Esponi game per debug console
   (window as unknown as { game: Phaser.Game }).game = game;
 }
