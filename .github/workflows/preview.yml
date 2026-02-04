@@ -3,6 +3,14 @@ name: PR Preview
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
+    paths:
+      - src/**
+      - public/**
+      - index.html
+      - package.json
+      - pnpm-lock.yaml
+      - vite.config.ts
+      - tsconfig.json
 
 env:
   PREVIEW_DOMAIN: ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}.surge.sh
