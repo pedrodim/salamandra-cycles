@@ -109,7 +109,7 @@ export class DevToolsScene extends Phaser.Scene {
     this.scene.bringToTop();
 
     // Hint in alto a sinistra
-    this.hintText = this.add.text(8, 8, 'DEV [`]', {
+    this.hintText = this.add.text(8, 8, 'DEV', {
       fontSize: '10px',
       color: COL.textDim,
       fontFamily: FONT,
@@ -151,14 +151,6 @@ export class DevToolsScene extends Phaser.Scene {
     // Pannello principale (container)
     this.panelContainer = this.add.container(0, 0).setDepth(DEPTH).setScrollFactor(0).setVisible(false);
     this.contentContainer = this.add.container(0, 0).setDepth(DEPTH + 1).setScrollFactor(0).setVisible(false);
-
-    // Intercetta backtick
-    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
-      if (event.key === '`') {
-        event.preventDefault();
-        this.togglePanel();
-      }
-    });
 
     // Evento da PauseScene per aprire il pannello
     this.events.on('toggle-panel', () => {
