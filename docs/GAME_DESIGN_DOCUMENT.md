@@ -1,4 +1,4 @@
-# 🦎 Salamandra: Cicli di Vita
+# 🦎 Cycles
 ## Game Design Document
 
 **Versione:** 0.2.0  
@@ -56,8 +56,8 @@ Il gioco nasce da un'immagine di una salamandra che nuota in acque torbide verdi
 │                                         │
 │   [Sfondo: stagno asciutto, crepe]      │
 │                                         │
-│            Salamandra                   │
-│           Cicli di Vita                 │
+│              Cycles                     │
+│           Cicli di vita                 │
 │                                         │
 │         ─────────────────               │
 │                                         │

@@ -1,5 +1,5 @@
 /**
- * Salamandra: Cicli di Vita
+ * Cycles
  * Entry point del gioco
  */
 
@@ -215,7 +215,7 @@ const game = new Phaser.Game(config);
 if (DEBUG.enabled) {
   console.log(`
   ╔═══════════════════════════════════════╗
-  ║  Salamandra: Cicli di Vita            ║
+  ║  Cycles                               ║
   ║  Mode: ${GAME_MODE.padEnd(30)}║
   ║  Debug: ${DEBUG.enabled ? 'ON' : 'OFF'}                           ║
   ╚═══════════════════════════════════════╝

@@ -1,4 +1,4 @@
-# Salamandra: Cicli di Vita
+# Cycles
 
 Gioco survival ciclico in Phaser 3 + TypeScript + Vite. Vivi la vita di una salamandra, generazione dopo generazione.
 

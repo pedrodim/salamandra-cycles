@@ -190,7 +190,7 @@ export class TitleScene extends Phaser.Scene {
   
   private createTitle(cx: number, cy: number) {
     // Titolo principale
-    const title = this.add.text(cx, cy - 150, 'Salamandra', {
+    const title = this.add.text(cx, cy - 150, 'Cycles', {
       fontSize: '36px',
       color: '#c9d4b8',
       fontFamily: 'Georgia, serif',
@@ -200,7 +200,7 @@ export class TitleScene extends Phaser.Scene {
     title.setShadow(2, 2, '#2a2a1a', 4);
     
     // Sottotitolo
-    const subtitle = this.add.text(cx, cy - 105, 'Cicli di Vita', {
+    const subtitle = this.add.text(cx, cy - 105, 'Cicli di vita', {
       fontSize: '16px',
       color: '#8b9b78',
       fontFamily: 'Georgia, serif',

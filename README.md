@@ -1,8 +1,8 @@
-# 🦎 Salamandra: Cicli di Vita
+# 🦎 Cycles
 
 Un gioco survival ciclico dove vivi la vita di una salamandra, generazione dopo generazione.
 
-![Ispirazione](docs/inspiration.jpg)
+![Cycles](docs/cycles.png)
 
 ## 📚 Documentazione
 
