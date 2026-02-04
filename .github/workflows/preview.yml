@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened, closed]
 
 env:
-  PREVIEW_DOMAIN: pr-${{ github.event.pull_request.number }}-cycles.pedrodim.dev
+  PREVIEW_DOMAIN: ${{ github.event.repository.name }}-pr-${{ github.event.pull_request.number }}.surge.sh
 
 jobs:
   deploy:
@@ -27,30 +27,6 @@ jobs:
 
       - run: pnpm build
 
-      - name: Create Cloudflare DNS record
-        run: |
-          # Cerca record esistente
-          RECORD_ID=$(curl -sf \
-            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/dns_records?name=$PREVIEW_DOMAIN" \
-            | jq -r '.result[0].id // empty')
-
-          if [ -n "$RECORD_ID" ]; then
-            # Aggiorna record esistente
-            curl -sf -X PUT \
-              -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-              -H "Content-Type: application/json" \
-              -d '{"type":"CNAME","name":"'"$PREVIEW_DOMAIN"'","content":"na-west1.surge.sh","proxied":true}' \
-              "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/dns_records/$RECORD_ID"
-          else
-            # Crea nuovo record
-            curl -sf -X POST \
-              -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-              -H "Content-Type: application/json" \
-              -d '{"type":"CNAME","name":"'"$PREVIEW_DOMAIN"'","content":"na-west1.surge.sh","proxied":true}' \
-              "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/dns_records"
-          fi
-
       - name: Deploy preview to Surge
         run: |
           echo "::add-mask::${{ secrets.SURGE_EMAIL }}"
@@ -62,7 +38,11 @@ jobs:
         with:
           script: |
             const url = 'https://${{ env.PREVIEW_DOMAIN }}';
-            const body = `🔗 **Preview disponibile:** ${url}`;
+            const sha = '${{ github.event.pull_request.head.sha }}'.slice(0, 7);
+            const body = [
+              `🔗 **Preview disponibile:** ${url}`,
+              `📦 **Commit:** \`${sha}\``,
+            ].join('\n');
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -95,16 +75,3 @@ jobs:
         run: |
           echo "::add-mask::${{ secrets.SURGE_EMAIL }}"
           npx surge teardown "$PREVIEW_DOMAIN" --token ${{ secrets.SURGE_TOKEN }}
-
-      - name: Delete Cloudflare DNS record
-        run: |
-          RECORD_ID=$(curl -sf \
-            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/dns_records?name=$PREVIEW_DOMAIN" \
-            | jq -r '.result[0].id // empty')
-
-          if [ -n "$RECORD_ID" ]; then
-            curl -sf -X DELETE \
-              -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-              "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/dns_records/$RECORD_ID"
-          fi
