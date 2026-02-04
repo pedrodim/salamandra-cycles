@@ -393,12 +393,14 @@ export class DevToolsScene extends Phaser.Scene {
 
     // Title e GameOver
     this.addButton(PANEL_PAD, cy, '[ Title ]', () => {
+      this.resetTimeControl();
       this.stopAllGameplayScenes();
       this.scene.manager.start('TitleScene');
     });
     cy += LINE_H;
 
     this.addButton(PANEL_PAD, cy, '[ GameOver ]', () => {
+      this.resetTimeControl();
       const state = this.getGameState() || createInitialGameState();
       this.stopAllGameplayScenes();
       this.scene.manager.start('GameOverScene', { gameState: state });
@@ -419,6 +421,10 @@ export class DevToolsScene extends Phaser.Scene {
   }
 
   private goToScene(sceneKey: string, phase: LifePhase) {
+    // Reset time control per evitare che la nuova scena parta congelata
+    this.isTimePaused = false;
+    this.gameTimeScale = 1;
+
     // Crea o recupera un GameState
     let gs = this.getGameState();
     if (!gs) {
@@ -433,7 +439,7 @@ export class DevToolsScene extends Phaser.Scene {
     // Avvia la scena target
     this.scene.manager.start(sceneKey, { gameState: gs });
     this.scene.bringToTop();
-    this.devLog(`Scena: ${sceneKey}`);
+    this.devLog(`Scena: ${sceneKey} (time reset 1x)`);
 
     // Aggiorna pannello
     if (this.panelOpen) {
@@ -742,6 +748,7 @@ export class DevToolsScene extends Phaser.Scene {
         saveGame(state);
         this.devLog('Save importato con successo');
         // Ricarica nella scena corretta
+        this.resetTimeControl();
         this.stopAllGameplayScenes();
         const sceneKey = SCENE_KEYS[state.currentPhase] || 'EggScene';
         this.scene.manager.start(sceneKey, { gameState: state });
@@ -777,6 +784,7 @@ export class DevToolsScene extends Phaser.Scene {
 
     // Nuovo GameState
     this.addButton(PANEL_PAD, cy, '[ Nuovo GameState fresco ]', () => {
+      this.resetTimeControl();
       const gs = createInitialGameState();
       this.stopAllGameplayScenes();
       this.scene.manager.start('EggScene', { gameState: gs });
@@ -947,6 +955,11 @@ export class DevToolsScene extends Phaser.Scene {
   // ============================================
   // HELPER: Time Control
   // ============================================
+  private resetTimeControl() {
+    this.isTimePaused = false;
+    this.gameTimeScale = 1;
+  }
+
   private applyTimeScale() {
     const scene = this.getActiveGameplayScene();
     if (!scene) return;
