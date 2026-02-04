@@ -27,7 +27,7 @@ jobs:
         id: deploy
         run: |
           echo "::add-mask::${{ secrets.SURGE_EMAIL }}"
-          PREVIEW_DOMAIN="pr-${{ github.event.pull_request.number }}-cycles.pedrodim.dev"
+          PREVIEW_DOMAIN="pr-${{ github.event.pull_request.number }}.cycles.pedrodim.dev"
           cp dist/index.html dist/200.html
           npx surge dist "$PREVIEW_DOMAIN" --token ${{ secrets.SURGE_TOKEN }}
           echo "url=https://$PREVIEW_DOMAIN" >> "$GITHUB_OUTPUT"
