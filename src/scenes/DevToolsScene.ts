@@ -956,6 +956,13 @@ export class DevToolsScene extends Phaser.Scene {
   // HELPER: Time Control
   // ============================================
   private resetTimeControl() {
+    // Riprendi la scena se era in pausa tempo
+    if (this.isTimePaused) {
+      const scene = this.getActiveGameplayScene();
+      if (scene && scene.scene.isPaused()) {
+        scene.scene.resume();
+      }
+    }
     this.isTimePaused = false;
     this.gameTimeScale = 1;
   }
@@ -965,12 +972,15 @@ export class DevToolsScene extends Phaser.Scene {
     if (!scene) return;
 
     if (this.isTimePaused) {
-      scene.time.timeScale = 0;
-      scene.tweens.timeScale = 0;
-      if (scene.physics?.world) {
-        scene.physics.world.timeScale = 999999; // quasi fermo
+      // Pausa completa: ferma update, input, timer, tweens
+      if (scene.scene.isActive()) {
+        scene.scene.pause();
       }
     } else {
+      // Riprendi se era in pausa
+      if (scene.scene.isPaused()) {
+        scene.scene.resume();
+      }
       scene.time.timeScale = this.gameTimeScale;
       scene.tweens.timeScale = this.gameTimeScale;
       if (scene.physics?.world) {
@@ -985,17 +995,13 @@ export class DevToolsScene extends Phaser.Scene {
     if (!scene) return;
 
     // Riprendi per un frame, poi ripausa
-    scene.time.timeScale = 1;
-    scene.tweens.timeScale = 1;
-    if (scene.physics?.world) {
-      scene.physics.world.timeScale = 1;
+    if (scene.scene.isPaused()) {
+      scene.scene.resume();
     }
 
     this.time.delayedCall(20, () => {
-      scene.time.timeScale = 0;
-      scene.tweens.timeScale = 0;
-      if (scene.physics?.world) {
-        scene.physics.world.timeScale = 999999;
+      if (scene.scene.isActive()) {
+        scene.scene.pause();
       }
     });
 
