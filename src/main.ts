@@ -228,8 +228,8 @@ const config: Phaser.Types.Core.GameConfig = {
 // Avvia il gioco
 const game = new Phaser.Game(config);
 
-// Dev tools - solo in development, tree-shaken in produzione
-if (import.meta.env.DEV) {
+// Dev tools - attivi in development e PR preview (VITE_DEVTOOLS)
+if (import.meta.env.DEV || import.meta.env.VITE_DEVTOOLS) {
   import('@/scenes/DevToolsScene').then(({ DevToolsScene }) => {
     game.scene.add('DevToolsScene', DevToolsScene, true);
   });

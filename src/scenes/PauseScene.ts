@@ -62,8 +62,8 @@ export class PauseScene extends Phaser.Scene {
     this.createButton(cx, btnY, 'Riprendi', () => this.resumeGame());
     btnY += 50;
 
-    // Dev Tools (solo in sviluppo)
-    if (import.meta.env.DEV) {
+    // Dev Tools (sviluppo e PR preview)
+    if (import.meta.env.DEV || import.meta.env.VITE_DEVTOOLS) {
       this.createButton(cx, btnY, 'Dev Tools', () => this.openDevTools());
       btnY += 50;
     }
