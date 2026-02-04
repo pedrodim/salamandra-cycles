@@ -160,6 +160,11 @@ export class DevToolsScene extends Phaser.Scene {
       }
     });
 
+    // Evento da PauseScene per aprire il pannello
+    this.events.on('toggle-panel', () => {
+      if (!this.panelOpen) this.togglePanel();
+    });
+
     // Resize handler
     this.scale.on('resize', () => {
       this.positionFps();
