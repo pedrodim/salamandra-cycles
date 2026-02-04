@@ -3,6 +3,14 @@ name: Deploy to Surge
 on:
   push:
     branches: [main]
+    paths:
+      - src/**
+      - public/**
+      - index.html
+      - package.json
+      - pnpm-lock.yaml
+      - vite.config.ts
+      - tsconfig.json
 
 concurrency:
   group: deploy-production
