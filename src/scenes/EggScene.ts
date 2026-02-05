@@ -74,6 +74,9 @@ export class EggScene extends Phaser.Scene {
     // Effetti particelle
     this.setupParticles();
     
+    // Bottone pausa (alto a sinistra, sopra il viewport)
+    this.createPauseButton();
+
     // Fade in iniziale
     this.cameras.main.fadeIn(2000, 30, 40, 30);
   }
@@ -191,11 +194,28 @@ export class EggScene extends Phaser.Scene {
 
     // ESC per pausa
     this.input.keyboard?.on('keydown-ESC', () => {
-      this.scene.pause();
-      this.scene.launch('PauseScene', { parentScene: this.scene.key, gameState: this.gameState });
+      this.openPause();
     });
   }
-  
+
+  private openPause() {
+    this.scene.pause();
+    this.scene.launch('PauseScene', { parentScene: this.scene.key, gameState: this.gameState });
+  }
+
+  private createPauseButton() {
+    const btn = this.add.text(12, 12, '||', {
+      fontSize: '18px',
+      color: '#c9d4b8',
+      fontFamily: 'monospace',
+      fontStyle: 'bold',
+    }).setScrollFactor(0).setDepth(100).setInteractive({ useHandCursor: true });
+
+    btn.on('pointerover', () => btn.setColor('#e9f4d8'));
+    btn.on('pointerout', () => btn.setColor('#c9d4b8'));
+    btn.on('pointerdown', () => this.openPause());
+  }
+
   private setupTimers() {
     const phaseDurationMs = CURRENT_DURATION.egg * MS_PER_MINUTE;
     const dayDurationMs = phaseDurationMs / 10;  // 10 "giorni" per fase uovo

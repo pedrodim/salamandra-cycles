@@ -1,6 +1,34 @@
 # 📝 Changelog e Note di Sviluppo
 
-## Versione 0.3.0 (Corrente)
+## Versione 0.4.0 (Corrente)
+
+### Nuove Funzionalità
+
+#### Dev Tools in-game
+- Pannello strumenti sviluppatore accessibile dal menu pausa (`||` → Dev Tools)
+- **Scene Control**: navigazione diretta a qualsiasi scena con stato personalizzabile
+- **Stats Editor**: modifica in tempo reale di vitali, stats genetici, mutazioni, parametri stagno
+- **Time Control**: velocità 0.25x–8x, pausa completa (`scene.pause()`), frame-step, avanzamento tempo
+- **Save Management**: export/import JSON, download file, copia clipboard, cancellazione save
+- **Debug Overlay**: FPS, stato giocatore live, hitboxes physics, info camera, bordi viewport, log eventi
+- Gated con `import.meta.env.DEV || VITE_DEVTOOLS`, eliminato in produzione
+- Attivo anche sulle PR preview (via `VITE_DEVTOOLS=true` nel workflow)
+- Intercettazione console.log per visualizzazione log in-game
+- Aggiornamento live dei valori nel pannello stats
+
+#### Bottone pausa in-game
+- Bottone `||` visibile in alto a sinistra in tutte le scene di gameplay (Egg, Larva) e nella IntroScene
+- Accesso al menu pausa anche tramite ESC
+- Dal menu pausa si accede ai Dev Tools (build sviluppo e PR preview)
+
+### Bug Fix
+- Cambio scena con tempo in pausa non congela più la nuova scena (reset automatico time control)
+- La pausa tempo ora blocca completamente il gameplay (usa `scene.pause()` invece di `timeScale=0`)
+- Il resume dopo pausa tempo funziona correttamente (ricerca scene anche in stato paused)
+
+---
+
+## Versione 0.3.0
 
 ### Nuove Funzionalità
 

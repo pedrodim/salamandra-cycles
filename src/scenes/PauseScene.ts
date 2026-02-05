@@ -58,8 +58,17 @@ export class PauseScene extends Phaser.Scene {
     info.setDepth(201);
 
     // Bottoni
-    this.createButton(cx, cy + 20, 'Riprendi', () => this.resumeGame());
-    this.createButton(cx, cy + 70, 'Esci', () => this.quitToMenu());
+    let btnY = cy + 20;
+    this.createButton(cx, btnY, 'Riprendi', () => this.resumeGame());
+    btnY += 50;
+
+    // Dev Tools (sviluppo e PR preview)
+    if (import.meta.env.DEV || import.meta.env.VITE_DEVTOOLS) {
+      this.createButton(cx, btnY, 'Dev Tools', () => this.openDevTools());
+      btnY += 50;
+    }
+
+    this.createButton(cx, btnY, 'Esci', () => this.quitToMenu());
 
     // ESC per riprendere
     this.input.keyboard?.on('keydown-ESC', () => {
@@ -93,6 +102,18 @@ export class PauseScene extends Phaser.Scene {
   private resumeGame() {
     this.scene.resume(this.parentScene);
     this.scene.stop();
+  }
+
+  private openDevTools() {
+    // Riprendi la scena di gioco e chiudi la pausa
+    this.scene.resume(this.parentScene);
+    this.scene.stop();
+
+    // Apri il pannello dev tools (simula pressione backtick)
+    const devScene = this.scene.manager.getScene('DevToolsScene');
+    if (devScene && devScene.scene.isActive()) {
+      devScene.events.emit('toggle-panel');
+    }
   }
 
   private quitToMenu() {

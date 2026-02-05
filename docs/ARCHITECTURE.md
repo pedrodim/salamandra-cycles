@@ -18,9 +18,12 @@
 │ EggScene      │    │               │    │               │
 │ LarvaScene    │    │               │    │ gameConfig.ts │
 │ PauseScene    │    │               │    │ (costanti)    │
+│ DevToolsScene*│    │               │    │               │
 │ JuvenileScene │    │               │    │               │
 │ AdultScene    │    │               │    │               │
 │ GameOverScene │    │               │    │               │
+│               │    │               │    │               │
+│ * solo DEV    │    │               │    │               │
 └───────────────┘    └───────────────┘    └───────────────┘
 ```
 
@@ -49,6 +52,7 @@ salamandra-cycles/
 │   │   ├── EggScene.ts         # Fase 1
 │   │   ├── LarvaScene.ts       # Fase 2
 │   │   ├── PauseScene.ts       # Overlay pausa (ESC)
+│   │   ├── DevToolsScene.ts    # Dev tools (solo DEV build)
 │   │   ├── JuvenileScene.ts    # Fase 3 (placeholder)
 │   │   └── AdultScene.ts       # Fase 4 (placeholder)
 │   │
@@ -512,6 +516,24 @@ Differenze:
 - Cicli 2.5x più veloci
 - Debug overlay abilitato
 - Console logging attivo
+
+### Dev Tools (build sviluppo e PR preview)
+
+In build di sviluppo (`pnpm dev`, `pnpm dev:trial`) e nelle PR preview,
+è disponibile un pannello strumenti sviluppatore accessibile dal **menu pausa**.
+
+**Accesso:** Bottone pausa `||` (alto a sinistra) → `[ Dev Tools ]`
+
+**Funzionalità:**
+- **Scene Control** - Navigazione diretta a qualsiasi scena/fase
+- **Stats Editor** - Modifica in tempo reale di vitali, stats, mutazioni, stagno
+- **Time Control** - Velocità (0.25x–8x), pausa completa (`scene.pause()`), frame-step, avanzamento tempo
+- **Save Management** - Export/import JSON, download file, copia clipboard
+- **Debug Overlay** - FPS, stato giocatore, hitboxes, info camera, bordi viewport, log eventi
+
+**Gating:** Il pannello è importato dinamicamente con `import.meta.env.DEV || import.meta.env.VITE_DEVTOOLS`.
+In sviluppo è sempre attivo. Nelle PR preview si attiva tramite `VITE_DEVTOOLS=true` nel workflow.
+In produzione viene completamente eliminato dal bundle (tree-shaking).
 
 ### Debug Console
 

@@ -383,8 +383,31 @@ export class IntroScene extends Phaser.Scene {
   
   create() {
     this.cameras.main.setBackgroundColor(0x000000);
+    this.createPauseButton();
     this.createSkipButton();
     this.showNextText();
+  }
+
+  private createPauseButton() {
+    const btn = this.add.text(12, 12, '||', {
+      fontSize: '18px',
+      color: '#c9d4b8',
+      fontFamily: 'monospace',
+      fontStyle: 'bold',
+    }).setDepth(100).setInteractive({ useHandCursor: true });
+
+    btn.on('pointerover', () => btn.setColor('#e9f4d8'));
+    btn.on('pointerout', () => btn.setColor('#c9d4b8'));
+    btn.on('pointerdown', () => this.openPause());
+
+    this.input.keyboard?.on('keydown-ESC', () => this.openPause());
+  }
+
+  private openPause() {
+    this.scene.pause();
+    // GameState minimale per PauseScene
+    const gs = createInitialGameState();
+    this.scene.launch('PauseScene', { parentScene: this.scene.key, gameState: gs });
   }
 
   private createSkipButton() {

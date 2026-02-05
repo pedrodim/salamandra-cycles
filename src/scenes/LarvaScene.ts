@@ -76,6 +76,7 @@ export class LarvaScene extends Phaser.Scene {
     this.createUI();
     this.spawnInitialFood();
     this.spawnPredators();
+    this.createPauseButton();
     this.cameras.main.fadeIn(1000, 30, 60, 40);
   }
   
@@ -128,9 +129,26 @@ export class LarvaScene extends Phaser.Scene {
 
     // ESC per pausa
     this.input.keyboard?.on('keydown-ESC', () => {
-      this.scene.pause();
-      this.scene.launch('PauseScene', { parentScene: this.scene.key, gameState: this.gameState });
+      this.openPause();
     });
+  }
+
+  private openPause() {
+    this.scene.pause();
+    this.scene.launch('PauseScene', { parentScene: this.scene.key, gameState: this.gameState });
+  }
+
+  private createPauseButton() {
+    const btn = this.add.text(12, 12, '||', {
+      fontSize: '18px',
+      color: '#c9d4b8',
+      fontFamily: 'monospace',
+      fontStyle: 'bold',
+    }).setScrollFactor(0).setDepth(100).setInteractive({ useHandCursor: true });
+
+    btn.on('pointerover', () => btn.setColor('#e9f4d8'));
+    btn.on('pointerout', () => btn.setColor('#c9d4b8'));
+    btn.on('pointerdown', () => this.openPause());
   }
   
   private setupTimers() {
