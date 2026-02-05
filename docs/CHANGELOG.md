@@ -4,8 +4,14 @@
 
 ### Nuove Funzionalità
 
+#### Controlli tastiera
+- Movimento con **frecce direzionali** in LarvaScene (in aggiunta al click-to-move)
+- Shortcut **backtick (`)** per aprire/chiudere i Dev Tools rapidamente
+- Le frecce cancellano il target click-to-move, permettendo movimento continuo
+- Supporto movimento diagonale normalizzato
+
 #### Dev Tools in-game
-- Pannello strumenti sviluppatore accessibile dal menu pausa (`||` → Dev Tools)
+- Pannello strumenti sviluppatore accessibile dal menu pausa (`||` → Dev Tools) o con tasto **`** (backtick)
 - **Scene Control**: navigazione diretta a qualsiasi scena con stato personalizzabile
 - **Stats Editor**: modifica in tempo reale di vitali, stats genetici, mutazioni, parametri stagno
 - **Time Control**: velocità 0.25x–8x, pausa completa (`scene.pause()`), frame-step, avanzamento tempo

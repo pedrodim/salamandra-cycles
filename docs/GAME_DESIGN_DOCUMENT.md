@@ -198,7 +198,7 @@ shakeCooldownMs: 1500      // Cooldown tra scuotimenti
 
 | Meccanica | Descrizione |
 |-----------|-------------|
-| **Movimento** | Point-and-click. Click/tap dove vuoi andare |
+| **Movimento** | Click/tap dove vuoi andare, oppure frecce direzionali |
 | **Fame** | Cala costantemente. Devi mangiare o muori |
 | **Nascondersi** | Vicino alle piante sei meno visibile |
 | **Crescita** | Mangiare fa crescere. Feedback visivo sul corpo |
@@ -210,10 +210,14 @@ speed: 30 px/sec           // Molto lento
 turnSpeed: 2 rad/sec       // Rotazione
 ```
 
-**Scelta di design:** Point-and-click invece di WASD perché:
-- Funziona identicamente su mobile e desktop
-- Più "naturale" per un essere acquatico (indica una direzione, nuota)
-- Meno stressante di controlli diretti
+**Controlli disponibili:**
+- **Click/tap** - Point-and-click: indica destinazione, la larva nuota verso quel punto
+- **Frecce direzionali** - Movimento continuo (sovrascrive click-to-move)
+
+**Scelta di design:** Sistema ibrido che supporta entrambi i metodi:
+- Click/tap funziona identicamente su mobile e desktop
+- Frecce offrono controllo diretto per chi preferisce la tastiera
+- Entrambi sono "naturali" per un essere acquatico
 
 #### Sistema Fame
 
@@ -722,16 +726,21 @@ Il salvataggio avviene:
 
 ## Scelte di Design
 
-### Perché Point-and-Click?
+### Perché Point-and-Click (+ Frecce)?
 
-**Alternativa considerata:** WASD / frecce direzionali
+**Sistema originale:** Solo click/tap
 
-**Problemi:**
-- Non funziona bene su mobile
-- Richiede due mani
-- Meno "naturale" per un essere acquatico
+**Evoluzione:** Aggiunto supporto frecce direzionali come alternativa
 
-**Soluzione:** Click/tap per indicare direzione. La salamandra nuota verso quel punto.
+**Implementazione attuale:**
+- **Click/tap** - Indica una destinazione, la salamandra nuota verso quel punto
+- **Frecce direzionali** - Movimento continuo diretto (sovrascrive il click-to-move)
+
+**Vantaggi del sistema ibrido:**
+- Click/tap funziona su mobile e desktop
+- Frecce offrono controllo più preciso per chi preferisce la tastiera
+- Entrambi i metodi sono "naturali" per un essere acquatico
+- Il giocatore sceglie lo stile che preferisce
 
 ### Perché Nessuna UI Fame?
 

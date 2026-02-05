@@ -465,6 +465,15 @@ this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
 ## Input
 
+### Controlli Disponibili
+
+| Input | Azione |
+|-------|--------|
+| Click/Tap | Movimento point-and-click verso destinazione |
+| Frecce direzionali | Movimento continuo (sovrascrive click-to-move) |
+| ESC | Apre menu pausa |
+| Backtick (`) | Toggle Dev Tools (solo build sviluppo) |
+
 ### Point-and-Click
 
 ```typescript
@@ -474,28 +483,54 @@ this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
 });
 ```
 
-### Movimento
+### Movimento da Tastiera
+
+```typescript
+// Setup cursori
+this.cursors = this.input.keyboard.createCursorKeys();
+
+// Update: movimento continuo con frecce
+updateKeyboardMovement(delta: number) {
+  let dx = 0, dy = 0;
+  if (this.cursors.left.isDown) dx -= 1;
+  if (this.cursors.right.isDown) dx += 1;
+  if (this.cursors.up.isDown) dy -= 1;
+  if (this.cursors.down.isDown) dy += 1;
+
+  if (dx === 0 && dy === 0) return;
+
+  // Normalizza per diagonali
+  const length = Math.sqrt(dx * dx + dy * dy);
+  dx /= length; dy /= length;
+
+  // Applica movimento
+  this.player.x += dx * speed * (delta / 1000);
+  this.player.y += dy * speed * (delta / 1000);
+}
+```
+
+### Movimento Click-to-Move
 
 ```typescript
 updateMovement(delta: number) {
   if (!this.isMoving || !this.targetX || !this.targetY) return;
-  
+
   const distance = Phaser.Math.Distance.Between(
     this.player.x, this.player.y,
     this.targetX, this.targetY
   );
-  
+
   if (distance < 5) {
     this.isMoving = false;
     return;
   }
-  
+
   const moveDistance = MOVEMENT.larva.speed * (delta / 1000);
   const angle = Phaser.Math.Angle.Between(
     this.player.x, this.player.y,
     this.targetX, this.targetY
   );
-  
+
   this.player.x += Math.cos(angle) * moveDistance;
   this.player.y += Math.sin(angle) * moveDistance;
 }
