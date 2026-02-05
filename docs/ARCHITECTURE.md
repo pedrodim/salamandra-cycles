@@ -517,20 +517,23 @@ Differenze:
 - Debug overlay abilitato
 - Console logging attivo
 
-### Dev Tools (solo build sviluppo)
+### Dev Tools (build sviluppo e PR preview)
 
-In qualsiasi build di sviluppo (`pnpm dev` o `pnpm dev:trial`), è disponibile
-un pannello strumenti sviluppatore attivabile con il tasto **backtick (`)**.
+In build di sviluppo (`pnpm dev`, `pnpm dev:trial`) e nelle PR preview,
+è disponibile un pannello strumenti sviluppatore accessibile dal **menu pausa**.
+
+**Accesso:** Bottone pausa `||` (alto a sinistra) → `[ Dev Tools ]`
 
 **Funzionalità:**
 - **Scene Control** - Navigazione diretta a qualsiasi scena/fase
 - **Stats Editor** - Modifica in tempo reale di vitali, stats, mutazioni, stagno
-- **Time Control** - Velocità (0.25x–8x), pausa, frame-step, avanzamento tempo
+- **Time Control** - Velocità (0.25x–8x), pausa completa (`scene.pause()`), frame-step, avanzamento tempo
 - **Save Management** - Export/import JSON, download file, copia clipboard
 - **Debug Overlay** - FPS, stato giocatore, hitboxes, info camera, bordi viewport, log eventi
 
-Il pannello è gated con `import.meta.env.DEV` e importato dinamicamente,
-quindi viene completamente eliminato dal bundle di produzione (tree-shaking).
+**Gating:** Il pannello è importato dinamicamente con `import.meta.env.DEV || import.meta.env.VITE_DEVTOOLS`.
+In sviluppo è sempre attivo. Nelle PR preview si attiva tramite `VITE_DEVTOOLS=true` nel workflow.
+In produzione viene completamente eliminato dal bundle (tree-shaking).
 
 ### Debug Console
 
