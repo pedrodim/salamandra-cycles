@@ -39,6 +39,9 @@ export class LarvaScene extends Phaser.Scene {
   private targetY: number | null = null;
   private targetMarker: Phaser.GameObjects.Arc | null = null;
   private isMoving: boolean = false;
+
+  // Keyboard controls
+  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   
   // Ambiente
   private plants: Phaser.GameObjects.Ellipse[] = [];
@@ -127,6 +130,11 @@ export class LarvaScene extends Phaser.Scene {
       this.setMoveTarget(worldPoint.x, worldPoint.y);
     });
 
+    // Frecce per movimento
+    if (this.input.keyboard) {
+      this.cursors = this.input.keyboard.createCursorKeys();
+    }
+
     // ESC per pausa
     this.input.keyboard?.on('keydown-ESC', () => {
       this.openPause();
@@ -208,12 +216,12 @@ export class LarvaScene extends Phaser.Scene {
   
   private updateMovement(delta: number) {
     if (!this.isMoving || this.targetX === null || this.targetY === null) return;
-    
+
     const speed = MOVEMENT.larva.speed;
     const distance = Phaser.Math.Distance.Between(
       this.player.x, this.player.y, this.targetX, this.targetY
     );
-    
+
     if (distance < 5) {
       this.isMoving = false;
       this.targetX = null;
@@ -221,18 +229,57 @@ export class LarvaScene extends Phaser.Scene {
       this.emitBubbles(1);
       return;
     }
-    
+
     const moveDistance = speed * (delta / 1000);
     const angle = Phaser.Math.Angle.Between(
       this.player.x, this.player.y, this.targetX, this.targetY
     );
-    
+
     this.player.x += Math.cos(angle) * moveDistance;
     this.player.y += Math.sin(angle) * moveDistance;
-    
+
     this.gameState.player.x = this.player.x;
     this.gameState.player.y = this.player.y;
-    
+
+    if (Math.random() < 0.02) this.emitBubbles(1);
+  }
+
+  private updateKeyboardMovement(delta: number) {
+    if (!this.cursors) return;
+
+    let dx = 0;
+    let dy = 0;
+
+    if (this.cursors.left.isDown) dx -= 1;
+    if (this.cursors.right.isDown) dx += 1;
+    if (this.cursors.up.isDown) dy -= 1;
+    if (this.cursors.down.isDown) dy += 1;
+
+    if (dx === 0 && dy === 0) return;
+
+    // Cancella il movimento click-to-move quando si usano le frecce
+    this.isMoving = false;
+    this.targetX = null;
+    this.targetY = null;
+
+    // Normalizza per movimento diagonale
+    const length = Math.sqrt(dx * dx + dy * dy);
+    dx /= length;
+    dy /= length;
+
+    const speed = MOVEMENT.larva.speed;
+    const moveDistance = speed * (delta / 1000);
+
+    this.player.x += dx * moveDistance;
+    this.player.y += dy * moveDistance;
+
+    // Aggiorna rotazione del player
+    const angle = Math.atan2(dy, dx);
+    this.player.setRotation(angle + Math.PI / 2);
+
+    this.gameState.player.x = this.player.x;
+    this.gameState.player.y = this.player.y;
+
     if (Math.random() < 0.02) this.emitBubbles(1);
   }
   
@@ -540,7 +587,8 @@ export class LarvaScene extends Phaser.Scene {
   
   update(_time: number, delta: number) {
     if (this.gameState.player.isDead) return;
-    
+
+    this.updateKeyboardMovement(delta);
     this.updateMovement(delta);
     this.checkFoodCollision();
     this.updatePredators();

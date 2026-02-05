@@ -157,6 +157,11 @@ export class DevToolsScene extends Phaser.Scene {
       if (!this.panelOpen) this.togglePanel();
     });
 
+    // Shortcut: backtick (`) per toggle pannello
+    this.input.keyboard?.on('keydown-BACKQUOTE', () => {
+      this.togglePanel();
+    });
+
     // Resize handler
     this.scale.on('resize', () => {
       this.positionFps();
